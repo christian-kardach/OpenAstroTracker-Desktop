@@ -166,5 +166,17 @@ namespace OATControl.Properties {
                 this["BaudRate"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("-1, -1")]
+        public global::System.Drawing.Point OATVisualizationPos {
+            get {
+                return ((global::System.Drawing.Point)(this["OATVisualizationPos"]));
+            }
+            set {
+                this["OATVisualizationPos"] = value;
+            }
+        }
     }
 }

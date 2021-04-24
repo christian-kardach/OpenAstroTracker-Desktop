@@ -126,12 +126,14 @@ namespace OATControl.ViewModels
 		DelegateCommand _showLogFolderCommand;
 		DelegateCommand _showSettingsCommand;
 		DelegateCommand _showMiniControllerCommand;
+		DelegateCommand _showOATVisualizationCommand;
 		DelegateCommand _factoryResetCommand;
 		DelegateCommand _startChangingCommand;
 		DelegateCommand _chooseTargetCommand;
 		DelegateCommand _setDecLowerLimitCommand;
 
 		MiniController _miniController;
+		OATVisualization _oatVisualization;
 		TargetChooser _targetChooser;
 
 		DispatcherTimer _timerStatus;
@@ -190,6 +192,7 @@ namespace OATControl.ViewModels
 			_showLogFolderCommand = new DelegateCommand(() => OnShowLogFolder(), () => true);
 			_showSettingsCommand = new DelegateCommand(() => OnShowSettingsDialog(), () => true);
 			_showMiniControllerCommand = new DelegateCommand(() => OnShowMiniController(), () => true);
+			_showOATVisualizationCommand = new DelegateCommand(() => OnShowOATVisualization(), () => true);
 			_factoryResetCommand = new DelegateCommand(() => OnPerformFactoryReset(), () => MountConnected);
 			_startChangingCommand = new DelegateCommand((p) => OnStartChangingParameter(p), () => MountConnected);
 			_chooseTargetCommand = new DelegateCommand((p) => OnShowTargetChooser(), () => MountConnected);
@@ -342,6 +345,29 @@ namespace OATControl.ViewModels
 				_miniController.Show();
 			}
 		}
+
+		private void OnShowOATVisualization()
+		{
+			if (_oatVisualization == null)
+			{
+				_oatVisualization = new OATVisualization();
+				if (Settings.Default.OATVisualizationPos.X != -1)
+				{
+					_oatVisualization.Left = Settings.Default.OATVisualizationPos.X;
+					_oatVisualization.Top = Settings.Default.OATVisualizationPos.Y;
+				}
+			}
+			if (_oatVisualization.IsVisible)
+			{
+				_oatVisualization.Hide();
+			}
+			else
+			{
+				_oatVisualization.Show();
+			}
+		}
+
+		
 
 		private void OnShowSettingsDialog()
 		{
@@ -871,6 +897,12 @@ namespace OATControl.ViewModels
 				_targetChooser = null;
 			}
 
+			if (_oatVisualization != null)
+			{
+				_oatVisualization.Close();
+				_oatVisualization = null;
+			}
+
 			Settings.Default.ShowDecLimits = ShowDECLimits;
 			Settings.Default.LowerDecLimit = DECStepperLowerLimit;
 			Settings.Default.UpperDecLimit = DECStepperUpperLimit;
@@ -1105,6 +1137,7 @@ namespace OATControl.ViewModels
 			_showLogFolderCommand.Requery();
 			_showSettingsCommand.Requery();
 			_showMiniControllerCommand.Requery();
+			_showOATVisualizationCommand.Requery();
 			_chooseTargetCommand.Requery();
 			_setDecLowerLimitCommand.Requery();
 
@@ -1487,6 +1520,7 @@ namespace OATControl.ViewModels
 		public ICommand ShowLogFolderCommand { get { return _showLogFolderCommand; } }
 		public ICommand ShowSettingsCommand { get { return _showSettingsCommand; } }
 		public ICommand ShowMiniControllerCommand { get { return _showMiniControllerCommand; } }
+		public ICommand ShowOATVisualizationCommand { get { return _showOATVisualizationCommand; } }
 		public ICommand FactoryResetCommand { get { return _factoryResetCommand; } }
 		public ICommand StartChangingCommand { get { return _startChangingCommand; } }
 		public ICommand ChooseTargetCommand { get { return _chooseTargetCommand; } }
